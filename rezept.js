@@ -323,68 +323,47 @@ function displayDeleteRecipes(searchTerm = '') {
 
 } 
 
-  
+document.getElementById('exportRecipesButton').addEventListener('click', () => {
+    const jsonData = JSON.stringify(recipes, null, 2); // Konvertiere Daten in JSON-Format
+    const blob = new Blob([jsonData], { type: "application/json" }); // Erstelle Blob-Objekt
+    const url = URL.createObjectURL(blob); // Erstelle Download-URL
 
-// Rezepte als JSON-Datei exportieren 
+    const a = document.createElement("a"); // Erstelle unsichtbaren <a>-Tag
+    a.href = url;
+    a.download = "rezepte.json"; // Dateiname für den Download
+    document.body.appendChild(a);
+    a.click(); // Simuliere den Klick auf den Download-Link
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url); // Speicher wieder freigeben
+});
 
-document.getElementById('exportRecipesButton').addEventListener('click', () => { 
+document.getElementById('importRecipesButton').addEventListener('click', () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "application/json";
+    
+    input.addEventListener("change", (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
 
-    fetch('https://your-external-ip-address:3000/upload', { // Ändere die URL hier 
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const importedData = JSON.parse(e.target.result); // JSON parsen
+                if (Array.isArray(importedData)) {
+                    recipes = importedData; // Daten in der App speichern
+                    localStorage.setItem('recipes', JSON.stringify(recipes)); // Auch im LocalStorage speichern
+                    alert("Rezepte erfolgreich importiert!");
+                } else {
+                    alert("Fehler: Ungültiges Datenformat.");
+                }
+            } catch (error) {
+                alert("Fehler beim Importieren der Datei.");
+            }
+        };
+        reader.readAsText(file);
+    });
 
-        method: 'POST', 
+    input.click(); // Öffne Dateiauswahl
+});
 
-        headers: { 
-
-            'Content-Type': 'application/json' 
-
-        }, 
-
-        body: JSON.stringify(recipes) 
-
-    }) 
-
-    .then(response => response.text()) 
-
-    .then(data => { 
-
-        alert(data); 
-
-    }) 
-
-    .catch(error => { 
-
-        console.error('Fehler beim Exportieren der Rezepte:', error); 
-
-    }); 
-
-}); 
-
-  
-
-// Rezepte von JSON-Datei importieren 
-
-document.getElementById('importRecipesButton').addEventListener('click', () => { 
-
-    fetch('https://your-external-ip-address:3000/download') // Ändere die URL hier 
-
-    .then(response => response.json()) 
-
-    .then(data => { 
-
-        recipes = data; 
-
-        localStorage.setItem('recipes', JSON.stringify(recipes)); 
-
-        alert('Rezepte importiert!'); 
-
-        displayAllRecipes(); 
-
-    }) 
-
-    .catch(error => { 
-
-        console.error('Fehler beim Importieren der Rezepte:', error); 
-
-    }); 
-
-}); 
