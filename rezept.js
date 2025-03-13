@@ -2,9 +2,9 @@
 
 let recipes = JSON.parse(localStorage.getItem('recipes')) || [ 
 
-    { name: 'Spaghetti Bolognese', details: 'Ein klassisches italienisches Gericht...' }, 
+    { name: 'Lachs', details: 'Ein lachsiger Fisch' }, 
 
-    { name: 'Chicken Curry', details: 'Ein würziges indisches Gericht...' }, 
+    { name: 'Dosenravioli', details: 'Beste wo gibt!' }, 
 
 ]; 
 
