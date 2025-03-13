@@ -16,7 +16,8 @@ document.getElementById('randomRecipeButton').addEventListener('click', () => {
 
     const randomRecipe = recipes[Math.floor(Math.random() * recipes.length)]; 
 
-    document.getElementById('recipeDisplay').innerHTML = `<h2>${randomRecipe.name}</h2><p>${recipe.details.replace(/\n/g, '<br>')}</p>`; 
+    const formattedDetails = randomRecipe.details.replace(/\n/g, "<br>");
+    document.getElementById('recipeDisplay').innerHTML = `<h2>${randomRecipe.name}</h2><p>${formattedDetails}</p>`; 
 
 }); 
 
