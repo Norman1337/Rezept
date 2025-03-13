@@ -1,0 +1,50 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Rezeptbuch</title>  
+    <link rel="stylesheet" href="rezept.css">  
+</head>  
+<body>  
+    <div id="homePage">  
+        <h1>Rezeptbuch</h1>  
+        <button id="randomRecipeButton">Zufälliges Rezept anzeigen</button>  
+        <button id="showAllRecipesButton">Alle Rezepte anzeigen</button>  
+        <button id="deleteRecipeButton">Rezept löschen</button>  
+        <button id="exportRecipesButton">Rezepte exportieren</button>  
+        <button id="importRecipesButton">Rezepte importieren</button>  
+        <div id="recipeDisplay"></div>  
+        <form id="addRecipeForm">  
+            <h2>Neues Rezept hinzufügen</h2>  
+            <label for="recipeName">Rezeptname:</label>  
+            <input type="text" id="recipeName" name="recipeName" required>  
+            <label for="recipeDetails">Details:</label>  
+            <textarea id="recipeDetails" name="recipeDetails" required></textarea>  
+            <button type="submit">Rezept hinzufügen</button>  
+        </form>  
+    </div>  
+  
+    <div id="allRecipesPage" style="display: none;">  
+        <h1>Alle Rezepte</h1>  
+        <input type="text" id="searchAllRecipes" placeholder="Rezept suchen...">  
+        <button id="backButton">Zurück</button>  
+        <div id="allRecipesDisplay"></div>  
+    </div>  
+  
+    <div id="recipeDetailsPage" style="display: none;">  
+        <h1>Rezeptdetails</h1>  
+        <button id="backToAllRecipesButton">Zurück</button>  
+        <div id="recipeDetailsDisplay"></div>  
+    </div>  
+  
+    <div id="deleteRecipePage" style="display: none;">  
+        <h1>Rezept löschen</h1>  
+        <input type="text" id="searchDeleteRecipes" placeholder="Rezept suchen...">  
+        <button id="backToHomeButton">Zurück</button>  
+        <div id="deleteRecipesDisplay"></div>  
+    </div>  
+  
+    <script src="rezept.js"></script>  
+</body>  
+</html>  
