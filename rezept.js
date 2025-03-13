@@ -78,7 +78,7 @@ function showRecipeDetails(index) {
 
         <h2>${recipe.name}</h2> 
 
-        <p>${recipe.details}</p> 
+        <p>${recipe.details.replace(/\n/g, '<br>')}</p> 
 
         <button id="editRecipeButton">Rezept bearbeiten</button> 
 
