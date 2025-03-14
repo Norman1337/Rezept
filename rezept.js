@@ -1,11 +1,3 @@
-// Sicherstellen, dass alle Rezepte ein "tags"-Array haben
-recipes = recipes.map(recipe => ({
-    ...recipe,
-    tags: recipe.tags || [] // Falls tags nicht existiert, setze es auf ein leeres Array
-}));
-
-// Aktualisiere die Daten in localStorage
-localStorage.setItem('recipes', JSON.stringify(recipes));
 
 // Initiale Rezepte mit Tags
 let recipes = JSON.parse(localStorage.getItem('recipes')) || [
