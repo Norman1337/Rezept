@@ -18,12 +18,25 @@ let recipes = JSON.parse(localStorage.getItem('recipes')) || [
 // Zufälliges Rezept anzeigen 
 
 document.getElementById('randomRecipeButton').addEventListener('click', () => {
-    const randomRecipe = recipes[Math.floor(Math.random() * recipes.length)];
-    document.getElementById('recipeDisplay').innerHTML = `
-        <h2>${randomRecipe.name}</h2>
-        <p>${randomRecipe.details.replace(/\n/g, "<br>")}</p>
-        <div>${randomRecipe.tags.map(tag => `<span class="tag">${tag}</span>`).join(' ')}</div>
-    `;
+    const searchTerm = document.getElementById('searchAllRecipes').value.toLowerCase(); // Suchbegriff von der Eingabe abholen
+
+    const filteredRecipes = recipes.filter(recipe => {
+        const recipeTags = Array.isArray(recipe.tags) ? recipe.tags : [];
+        const matchesName = recipe.name.toLowerCase().includes(searchTerm);
+        const matchesTags = recipeTags.some(tag => tag.toLowerCase().includes(searchTerm));
+        return matchesName || matchesTags;
+    });
+
+    if (filteredRecipes.length > 0) {
+        const randomRecipe = filteredRecipes[Math.floor(Math.random() * filteredRecipes.length)];
+        document.getElementById('recipeDisplay').innerHTML = `
+            <h2>${randomRecipe.name}</h2>
+            <p>${randomRecipe.details.replace(/\n/g, "<br>")}</p>
+            <div>${randomRecipe.tags.map(tag => `<span class="tag">${tag}</span>`).join(' ')}</div>
+        `;
+    } else {
+        alert("Kein Rezept mit den gewählten Tags gefunden.");
+    }
 });
 
   
@@ -96,61 +109,42 @@ function showRecipeDetails(index) {
 
 // Rezept bearbeiten 
 
-function editRecipe(index) { 
+function editRecipe(index) {
+    const recipe = recipes[index];
+    
+    document.getElementById('recipeDetailsDisplay').innerHTML = `
+        <h2>Rezept bearbeiten</h2>
+        <form id="editRecipeForm">
+            <label for="editRecipeName">Rezeptname:</label>
+            <input type="text" id="editRecipeName" name="editRecipeName" value="${recipe.name}" required>
 
-    const recipe = recipes[index]; 
+            <label for="editRecipeDetails">Details:</label>
+            <textarea id="editRecipeDetails" name="editRecipeDetails" required>${recipe.details}</textarea>
 
-    document.getElementById('recipeDetailsDisplay').innerHTML = ` 
+            <label for="editRecipeTags">Tags (komma-getrennt):</label>
+            <input type="text" id="editRecipeTags" name="editRecipeTags" value="${recipe.tags.join(', ')}">
 
-        <h2>Rezept bearbeiten</h2> 
+            <button type="submit">Änderungen speichern</button>
+        </form>
+    `;
+    
+    document.getElementById('editRecipeForm').addEventListener('submit', (event) => {
+        event.preventDefault();
+        
+        const newRecipeName = document.getElementById('editRecipeName').value.trim();
+        const newRecipeDetails = document.getElementById('editRecipeDetails').value.trim();
+        const newRecipeTags = document.getElementById('editRecipeTags').value.split(',').map(tag => tag.trim()).filter(tag => tag);
 
-        <form id="editRecipeForm"> 
-
-            <label for="editRecipeName">Rezeptname:</label> 
-
-            <input type="text" id="editRecipeName" name="editRecipeName" value="${recipe.name}" required> 
-
-            <label for="editRecipeDetails">Details:</label> 
-
-            <textarea id="editRecipeDetails" name="editRecipeDetails" required>${recipe.details}</textarea> 
-
-            <button type="submit">Änderungen speichern</button> 
-
-        </form> 
-
-    `; 
-
-  
-
-    document.getElementById('editRecipeForm').addEventListener('submit', (event) => { 
-
-        event.preventDefault(); 
-
-        const newRecipeName = document.getElementById('editRecipeName').value.trim(); 
-
-        const newRecipeDetails = document.getElementById('editRecipeDetails').value.trim(); 
-
-  
-
-        if (newRecipeName && newRecipeDetails) { 
-
-            recipes[index] = { name: newRecipeName, details: newRecipeDetails }; 
-
-            localStorage.setItem('recipes', JSON.stringify(recipes)); 
-
-            alert('Rezept aktualisiert!'); 
-
-            showRecipeDetails(index); 
-
-        } else { 
-
-            alert('Bitte füllen Sie alle Felder aus.'); 
-
-        } 
-
-    }); 
-
-} 
+        if (newRecipeName && newRecipeDetails) {
+            recipes[index] = { name: newRecipeName, details: newRecipeDetails, tags: newRecipeTags };
+            localStorage.setItem('recipes', JSON.stringify(recipes));
+            alert('Rezept aktualisiert!');
+            showRecipeDetails(index);
+        } else {
+            alert('Bitte füllen Sie alle Felder aus.');
+        }
+    });
+}
 
   
 
@@ -244,7 +238,7 @@ document.getElementById('searchDeleteRecipes').addEventListener('input', (event)
 
 // Funktion zum Anzeigen aller Rezepte mit optionaler Suche 
 
-function displayAllRecipes(searchTerm = '') { 
+function displayAllRecipes(searchTerm = '') {
     const allRecipesDisplay = document.getElementById('allRecipesDisplay');
     allRecipesDisplay.innerHTML = '';
 
@@ -252,15 +246,15 @@ function displayAllRecipes(searchTerm = '') {
         const recipeTags = Array.isArray(recipe.tags) ? recipe.tags : []; // Sicherstellen, dass tags immer ein Array ist
 
         const matchesName = recipe.name.toLowerCase().includes(searchTerm);
-        const matchesTags = recipeTags.length > 0 && recipeTags.some(tag => tag.toLowerCase().includes(searchTerm));
+        const matchesTags = recipeTags.some(tag => tag.toLowerCase().includes(searchTerm));
 
-        if (matchesName || matchesTags) { 
+        if (matchesName || matchesTags) {
             const recipeElement = document.createElement('div');
             recipeElement.className = 'recipe-name';
             recipeElement.innerHTML = `<strong>${recipe.name}</strong> <br> ${recipeTags.map(tag => `<span class="tag">${tag}</span>`).join(' ')}`;
             recipeElement.addEventListener('click', () => { showRecipeDetails(index); });
             allRecipesDisplay.appendChild(recipeElement);
-        } 
+        }
     });
 }
 
