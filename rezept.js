@@ -235,23 +235,27 @@ document.getElementById('searchDeleteRecipes').addEventListener('input', (event)
 
 // Funktion zum Anzeigen aller Rezepte mit optionaler Suche 
 
-function displayAllRecipes(searchTerm = '') {
+function displayAllRecipes(searchTerm = '') { 
     const allRecipesDisplay = document.getElementById('allRecipesDisplay');
     allRecipesDisplay.innerHTML = '';
-    
+
     recipes.forEach((recipe, index) => {
+        // Falls `tags` nicht existiert, setzen wir ein leeres Array
+        const recipeTags = recipe.tags || [];
+
         const matchesName = recipe.name.toLowerCase().includes(searchTerm);
-        const matchesTags = recipe.tags.some(tag => tag.toLowerCase().includes(searchTerm));
-        
-        if (matchesName || matchesTags) {
+        const matchesTags = recipeTags.some(tag => tag.toLowerCase().includes(searchTerm));
+
+        if (matchesName || matchesTags) { 
             const recipeElement = document.createElement('div');
             recipeElement.className = 'recipe-name';
-            recipeElement.innerHTML = `<strong>${recipe.name}</strong> - Tags: ${recipe.tags.join(', ')}`;
-            recipeElement.addEventListener('click', () => showRecipeDetails(index));
+            recipeElement.innerHTML = `<strong>${recipe.name}</strong> <br> ${recipeTags.map(tag => `<span class="tag">${tag}</span>`).join(' ')}`;
+            recipeElement.addEventListener('click', () => { showRecipeDetails(index); });
             allRecipesDisplay.appendChild(recipeElement);
-        }
+        } 
     });
 }
+
 
   
 
