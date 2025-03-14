@@ -72,6 +72,36 @@ input, textarea {
     text-decoration: underline;
 }
 
+input[type="text"], textarea {  
+    background-color: #f9f9f9;  
+}  
+  
+input[type="text"]:focus, textarea:focus {  
+    border-color: #28a745; /* Grün */  
+    outline: none;  
+}  
+  
+/* Responsive Design */  
+@media (max-width: 600px) {  
+    body {  
+        margin: 10px;  
+    }  
+  
+    button, .button {  
+        width: 100%;  
+        padding: 15px;  
+        font-size: 18px;  
+    }  
+  
+    input, textarea {  
+        font-size: 18px;  
+    }  
+  
+    .recipe-name {  
+        font-size: 20px;  
+    }  
+}  
+
 .tag {
     display: inline-block;
     background-color: #28a745;
