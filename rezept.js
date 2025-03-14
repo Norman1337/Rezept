@@ -1,57 +1,41 @@
-// Initiale Rezepte 
-
-let recipes = JSON.parse(localStorage.getItem('recipes')) || [ 
-
-    { name: 'Lachs', details: 'Ein lachsiger Fisch' }, 
-
-    { name: 'Dosenravioli', details: 'Beste wo gibt!' }, 
-
-]; 
+// Initiale Rezepte mit Tags
+let recipes = JSON.parse(localStorage.getItem('recipes')) || [
+    { name: 'Lachs', details: 'Ein lachsiger Fisch', tags: ['Fisch', 'Gesund'] },
+    { name: 'Dosenravioli', details: 'Beste wo gibt!', tags: ['Schnell', 'Camping'] },
+];
 
   
 
 // Zufälliges Rezept anzeigen 
 
-document.getElementById('randomRecipeButton').addEventListener('click', () => { 
-
-    const randomRecipe = recipes[Math.floor(Math.random() * recipes.length)]; 
-    console.log("Rezeptdetails (vor der Anzeige):", JSON.stringify(randomRecipe.details));
-    const formattedDetails = randomRecipe.details.replace(/\n/g, "<br>");
-    document.getElementById('recipeDisplay').innerHTML = `<h2>${randomRecipe.name}</h2><p>${formattedDetails}</p>`; 
-
-}); 
-
-  
-
-// Neues Rezept hinzufügen 
-
-document.getElementById('addRecipeForm').addEventListener('submit', (event) => { 
-
-    event.preventDefault(); 
-
-    const recipeName = document.getElementById('recipeName').value.trim(); 
-
-    const recipeDetails = document.getElementById('recipeDetails').value.trim(); 
+document.getElementById('randomRecipeButton').addEventListener('click', () => {
+    const randomRecipe = recipes[Math.floor(Math.random() * recipes.length)];
+    document.getElementById('recipeDisplay').innerHTML = `
+        <h2>${randomRecipe.name}</h2>
+        <p>${randomRecipe.details.replace(/\n/g, "<br>")}</p>
+        <div>${randomRecipe.tags.map(tag => `<span class="tag">${tag}</span>`).join(' ')}</div>
+    `;
+});
 
   
 
-    if (recipeName && recipeDetails) { 
+// Neues Rezept hinzufügen
+document.getElementById('addRecipeForm').addEventListener('submit', (event) => {
+    event.preventDefault();
+    
+    const recipeName = document.getElementById('recipeName').value.trim();
+    const recipeDetails = document.getElementById('recipeDetails').value.trim();
+    const recipeTags = document.getElementById('recipeTags').value.split(',').map(tag => tag.trim()).filter(tag => tag);
 
-        recipes.push({ name: recipeName, details: recipeDetails }); 
-
-        localStorage.setItem('recipes', JSON.stringify(recipes)); 
-
-        document.getElementById('addRecipeForm').reset(); 
-
-        alert('Rezept hinzugefügt!'); 
-
-    } else { 
-
-        alert('Bitte füllen Sie alle Felder aus.'); 
-
-    } 
-
-}); 
+    if (recipeName && recipeDetails) {
+        recipes.push({ name: recipeName, details: recipeDetails, tags: recipeTags });
+        localStorage.setItem('recipes', JSON.stringify(recipes));
+        document.getElementById('addRecipeForm').reset();
+        alert('Rezept hinzugefügt!');
+    } else {
+        alert('Bitte füllen Sie alle Felder aus.');
+    }
+});
 
   
 
@@ -229,15 +213,11 @@ document.getElementById('backToHomeButton').addEventListener('click', () => {
 
   
 
-// Suchfunktion für alle Rezepte 
-
-document.getElementById('searchAllRecipes').addEventListener('input', (event) => { 
-
-    const searchTerm = event.target.value.toLowerCase(); 
-
-    displayAllRecipes(searchTerm); 
-
-}); 
+// Suchfunktion für alle Rezepte (nach Namen und Tags)
+document.getElementById('searchAllRecipes').addEventListener('input', (event) => {
+    const searchTerm = event.target.value.toLowerCase();
+    displayAllRecipes(searchTerm);
+});
 
   
 
@@ -255,35 +235,23 @@ document.getElementById('searchDeleteRecipes').addEventListener('input', (event)
 
 // Funktion zum Anzeigen aller Rezepte mit optionaler Suche 
 
-function displayAllRecipes(searchTerm = '') { 
-
-    const allRecipesDisplay = document.getElementById('allRecipesDisplay'); 
-
-    allRecipesDisplay.innerHTML = ''; 
-
-    recipes.forEach((recipe, index) => { 
-
-        if (recipe.name.toLowerCase().includes(searchTerm)) { 
-
-            const recipeElement = document.createElement('div'); 
-
-            recipeElement.className = 'recipe-name'; 
-
-            recipeElement.textContent = recipe.name; 
-
-            recipeElement.addEventListener('click', () => { 
-
-                showRecipeDetails(index); 
-
-            }); 
-
-            allRecipesDisplay.appendChild(recipeElement); 
-
-        } 
-
-    }); 
-
-} 
+function displayAllRecipes(searchTerm = '') {
+    const allRecipesDisplay = document.getElementById('allRecipesDisplay');
+    allRecipesDisplay.innerHTML = '';
+    
+    recipes.forEach((recipe, index) => {
+        const matchesName = recipe.name.toLowerCase().includes(searchTerm);
+        const matchesTags = recipe.tags.some(tag => tag.toLowerCase().includes(searchTerm));
+        
+        if (matchesName || matchesTags) {
+            const recipeElement = document.createElement('div');
+            recipeElement.className = 'recipe-name';
+            recipeElement.innerHTML = `<strong>${recipe.name}</strong> - Tags: ${recipe.tags.join(', ')}`;
+            recipeElement.addEventListener('click', () => showRecipeDetails(index));
+            allRecipesDisplay.appendChild(recipeElement);
+        }
+    });
+}
 
   
 
