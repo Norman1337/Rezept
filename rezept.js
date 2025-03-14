@@ -1,3 +1,12 @@
+// Sicherstellen, dass alle Rezepte ein "tags"-Array haben
+recipes = recipes.map(recipe => ({
+    ...recipe,
+    tags: recipe.tags || [] // Falls tags nicht existiert, setze es auf ein leeres Array
+}));
+
+// Aktualisiere die Daten in localStorage
+localStorage.setItem('recipes', JSON.stringify(recipes));
+
 // Initiale Rezepte mit Tags
 let recipes = JSON.parse(localStorage.getItem('recipes')) || [
     { name: 'Lachs', details: 'Ein lachsiger Fisch', tags: ['Fisch', 'Gesund'] },
@@ -240,11 +249,10 @@ function displayAllRecipes(searchTerm = '') {
     allRecipesDisplay.innerHTML = '';
 
     recipes.forEach((recipe, index) => {
-        // Falls `tags` nicht existiert, setzen wir ein leeres Array
-        const recipeTags = recipe.tags || [];
+        const recipeTags = Array.isArray(recipe.tags) ? recipe.tags : []; // Sicherstellen, dass tags immer ein Array ist
 
         const matchesName = recipe.name.toLowerCase().includes(searchTerm);
-        const matchesTags = recipeTags.some(tag => tag.toLowerCase().includes(searchTerm));
+        const matchesTags = recipeTags.length > 0 && recipeTags.some(tag => tag.toLowerCase().includes(searchTerm));
 
         if (matchesName || matchesTags) { 
             const recipeElement = document.createElement('div');
