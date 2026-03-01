@@ -5,11 +5,13 @@ body {
     color: #333;
 }
 
-h1, h2 {
+h1,
+h2 {
     color: #333;
 }
 
-button, .button {
+button,
+.button {
     margin: 10px 0;
     padding: 10px 20px;
     background-color: #28a745;
@@ -23,7 +25,8 @@ button, .button {
     text-align: center;
 }
 
-button:hover, .button:hover {
+button:hover,
+.button:hover {
     background-color: #218838;
 }
 
@@ -41,7 +44,9 @@ label {
     font-weight: bold;
 }
 
-input, textarea {
+input,
+textarea,
+select {
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
@@ -51,7 +56,8 @@ input, textarea {
     box-sizing: border-box;
 }
 
-#allRecipesDisplay, #deleteRecipesDisplay {
+#allRecipesDisplay,
+#deleteRecipesDisplay {
     margin-top: 20px;
     background-color: white;
     padding: 20px;
@@ -72,37 +78,70 @@ input, textarea {
     text-decoration: underline;
 }
 
-input[type="text"], textarea {  
-    background-color: #f9f9f9;  
-}  
-  
-input[type="text"]:focus, textarea:focus {  
-    border-color: #28a745; /* Grün */  
-    outline: none;  
-}  
-  
-/* Responsive Design */  
-@media (max-width: 600px) {  
-    body {  
-        margin: 10px;  
-    }  
-  
-    button, .button {  
-        width: 100%;  
-        padding: 15px;  
-        font-size: 18px;  
-    }  
-  
-    input, textarea {  
-        font-size: 18px;  
-    }  
-  
-    .recipe-name {  
-        font-size: 20px;  
-    }  
-}  
+input[type="text"],
+textarea,
+select {
+    background-color: #f9f9f9;
+}
 
-.tag {
+input[type="text"]:focus,
+textarea:focus,
+select:focus {
+    border-color: #28a745;
+    /* Grün */
+    outline: none;
+}
+
+/* Filter Categories */
+.filter-categories {
+    margin-bottom: 15px;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.filter-categories label {
+    display: inline-flex;
+    align-items: center;
+    font-weight: normal;
+    background: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    margin: 0;
+}
+
+.filter-categories input[type="checkbox"] {
+    width: auto;
+    margin: 0 8px 0 0;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    body {
+        margin: 10px;
+    }
+
+    button,
+    .button {
+        width: 100%;
+        padding: 15px;
+        font-size: 18px;
+    }
+
+    input,
+    textarea,
+    select {
+        font-size: 18px;
+    }
+
+    .recipe-name {
+        font-size: 20px;
+    }
+}
+
+.category {
     display: inline-block;
     background-color: #28a745;
     color: white;
