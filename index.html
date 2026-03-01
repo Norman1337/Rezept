@@ -1,39 +1,65 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rezeptbuch</title>
     <link rel="stylesheet" href="rezept.css">
 </head>
+
 <body>
     <div id="homePage">
         <h1>Rezeptbuch</h1>
-        <button id="randomRecipeButton">Zufälliges Rezept anzeigen</button>
+
+        <div class="random-recipe-controls"
+            style="margin-bottom: 20px; padding: 15px; background-color: white; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+            <h3>Lass den Zufall entscheiden!</h3>
+            <input type="text" id="searchRandomRecipe" placeholder="Optional: Nach Rezeptname filtern...">
+            <div class="filter-categories">
+                <label><input type="checkbox" class="category-filter-random" value="Hauptspeise" checked>
+                    Hauptspeise</label>
+                <label><input type="checkbox" class="category-filter-random" value="Dessert" checked> Dessert</label>
+                <label><input type="checkbox" class="category-filter-random" value="Sonstiges" checked>
+                    Sonstiges</label>
+            </div>
+            <button id="randomRecipeButton" style="width: 100%;">Zufälliges Rezept anzeigen</button>
+        </div>
+
+        <div id="recipeDisplay"></div>
         <button id="showAllRecipesButton">Alle Rezepte anzeigen</button>
         <button id="deleteRecipeButton">Rezept löschen</button>
         <button id="exportRecipesButton">Rezepte exportieren</button>
         <button id="importRecipesButton">Rezepte importieren</button>
-        <div id="recipeDisplay"></div>
+
 
         <form id="addRecipeForm">
             <h2>Neues Rezept hinzufügen</h2>
             <label for="recipeName">Rezeptname:</label>
             <input type="text" id="recipeName" name="recipeName" required>
-            
+
             <label for="recipeDetails">Details:</label>
             <textarea id="recipeDetails" name="recipeDetails" required></textarea>
-            
-            <label for="recipeTags">Tags (komma-getrennt):</label>
-            <input type="text" id="recipeTags" name="recipeTags" placeholder="z. B. vegan, schnell, gesund">
-            
+
+            <label for="recipeCategory">Kategorie:</label>
+            <select id="recipeCategory" name="recipeCategory" required>
+                <option value="Hauptspeise">Hauptspeise</option>
+                <option value="Dessert">Dessert</option>
+                <option value="Sonstiges">Sonstiges</option>
+            </select>
+
             <button type="submit">Rezept hinzufügen</button>
         </form>
     </div>
 
     <div id="allRecipesPage" style="display: none;">
         <h1>Alle Rezepte</h1>
-        <input type="text" id="searchAllRecipes" placeholder="Rezept oder Tag suchen...">
+        <input type="text" id="searchAllRecipes" placeholder="Nach Rezeptname suchen...">
+        <div class="filter-categories">
+            <label><input type="checkbox" class="category-filter" value="Hauptspeise" checked> Hauptspeise</label>
+            <label><input type="checkbox" class="category-filter" value="Dessert" checked> Dessert</label>
+            <label><input type="checkbox" class="category-filter" value="Sonstiges" checked> Sonstiges</label>
+        </div>
         <button id="backButton">Zurück</button>
         <div id="allRecipesDisplay"></div>
     </div>
@@ -53,4 +79,5 @@
 
     <script src="rezept.js"></script>
 </body>
+
 </html>
